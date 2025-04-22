@@ -3,6 +3,8 @@ package com.accenture.accenturetest.infrastructure.controllers.franchise;
 
 import com.accenture.accenturetest.aplication.franchise.FranchiseService;
 import com.accenture.accenturetest.domain.model.Franchise;
+import com.accenture.accenturetest.infrastructure.dto.branch.BranchRequestDTO;
+import com.accenture.accenturetest.infrastructure.dto.branch.BranchResponseDTO;
 import com.accenture.accenturetest.infrastructure.dto.franchise.FranchiseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,4 +29,14 @@ public class FranchiseController {
     public ResponseEntity<FranchiseDTO> updateName(@PathVariable Long id, @RequestBody String newName) {
         return ResponseEntity.ok(service.updateFranchiseName(id, newName));
     }
+
+    @PostMapping("/{franchiseId}/branches")
+    public ResponseEntity<BranchResponseDTO> addBranchToFranchise(
+            @PathVariable Long franchiseId,
+            @RequestBody BranchRequestDTO branchRequest) {
+
+        BranchResponseDTO branchDTO = service.addBranchToFranchise(franchiseId, branchRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(branchDTO);
+    }
+
 }

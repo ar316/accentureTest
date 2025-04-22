@@ -1,16 +1,23 @@
 package com.accenture.accenturetest.domain.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
 @Table(name = "franquicia")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Franchise {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long idFranchise;
+  @Column(name = "id_frachise")
+  private Long id;
 
   @Column(name = "nombre_frnquicia")
   private String name;
