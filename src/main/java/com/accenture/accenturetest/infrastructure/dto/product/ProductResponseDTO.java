@@ -1,4 +1,4 @@
-package com.accenture.accenturetest.infrastructure.dto.branch;
+package com.accenture.accenturetest.infrastructure.dto.product;
 
 
 import lombok.*;
@@ -8,7 +8,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BranchResponseDTO {
+@Data
+public class ProductResponseDTO {
   private Long id;
   private String name;
+  private int stock;
 }

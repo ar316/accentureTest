@@ -30,7 +30,7 @@ public class FranchiseController {
         return ResponseEntity.ok(service.updateFranchiseName(id, newName));
     }
 
-    @PostMapping("/{franchiseId}/branches")
+    @PostMapping("/{franchiseId}/create-branch")
     public ResponseEntity<BranchResponseDTO> addBranchToFranchise(
             @PathVariable Long franchiseId,
             @RequestBody BranchRequestDTO branchRequest) {

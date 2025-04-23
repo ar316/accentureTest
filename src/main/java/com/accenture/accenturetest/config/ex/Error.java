@@ -21,11 +21,8 @@ public class Error implements Serializable {
   public enum Type {
     // 400
     FRANCHISE_NOT_FOUND,
-
-
-
-    
-
+    BRANCH_NOT_FOUND,
+    PRODUCT_NOT_FOUND,
 
     INVALID_ARGUMENT,
     INVALID_BODY,

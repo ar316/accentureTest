@@ -1,9 +1,16 @@
 package com.accenture.accenturetest.domain.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Data
 public class Product {
 
     @Id

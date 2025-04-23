@@ -1,14 +1,13 @@
 package com.accenture.accenturetest.aplication.franchise.impl;
 
 import com.accenture.accenturetest.aplication.franchise.FranchiseService;
-import com.accenture.accenturetest.config.ex.FranchiseNotFoundEx;
 import com.accenture.accenturetest.domain.model.Branch;
 import com.accenture.accenturetest.domain.model.Franchise;
+import com.accenture.accenturetest.infrastructure.dao.branch.BranchDao;
 import com.accenture.accenturetest.infrastructure.dao.franchise.FranchiseDao;
 import com.accenture.accenturetest.infrastructure.dto.branch.BranchRequestDTO;
 import com.accenture.accenturetest.infrastructure.dto.branch.BranchResponseDTO;
 import com.accenture.accenturetest.infrastructure.dto.franchise.FranchiseDTO;
-import com.accenture.accenturetest.infrastructure.repositories.BranchRepository;
 
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class FranchiseServiceimpl implements FranchiseService {
 
   private final FranchiseDao franchiseDao;
-  private final BranchRepository branchRepository;
+  private final BranchDao branchDao;
   private final Function<FranchiseDTO, Franchise> franchiseDTOToEntity;
   private final Function<Franchise, FranchiseDTO> entityToFranchiseDTO;
   private final Function<Branch, BranchResponseDTO> entityToBranchDTO;
@@ -44,8 +43,7 @@ public class FranchiseServiceimpl implements FranchiseService {
     Franchise franchise = franchiseDao.findById(franchiseId);
 
     Branch response =
-        branchRepository.save(
-            Branch.builder().name(branchRequest.getName()).franchise(franchise).build());
+        branchDao.save(Branch.builder().name(branchRequest.getName()).franchise(franchise).build());
 
     return entityToBranchDTO.apply(response);
   }
