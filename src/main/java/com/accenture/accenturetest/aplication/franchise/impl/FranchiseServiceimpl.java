@@ -82,7 +82,6 @@ public class FranchiseServiceimpl implements FranchiseService {
         .toList();
   }
 
-  // Método auxiliar para mapear Product a ProductResponseDTO.
   private ProductResponseDTO mapToProductResponseDTO(Product product) {
     return ProductResponseDTO.builder()
         .id(product.getId())

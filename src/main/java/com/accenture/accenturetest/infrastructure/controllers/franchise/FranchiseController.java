@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/franchises")
+@RequestMapping("/api/franchise")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class FranchiseController {
 
   private final FranchiseService service;
@@ -43,7 +44,6 @@ public class FranchiseController {
   @GetMapping("/roducts-with-mostStock-per-branch")
   public ResponseEntity<List<ProductsByBranchResponseDTO>> getProductsWithMostStockPerBranch(
       @RequestParam("franchiseId") Long franchiseId) {
-    return ResponseEntity.status(HttpStatus.OK)
-        .body(service.getProductsWithMostStockPerBranch(franchiseId));
+    return ResponseEntity.ok().body(service.getProductsWithMostStockPerBranch(franchiseId));
   }
 }

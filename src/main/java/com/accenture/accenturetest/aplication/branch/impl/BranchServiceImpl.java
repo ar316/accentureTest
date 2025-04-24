@@ -1,6 +1,7 @@
 package com.accenture.accenturetest.aplication.branch.impl;
 
 import com.accenture.accenturetest.aplication.branch.BranchService;
+import com.accenture.accenturetest.config.CollectConstant;
 import com.accenture.accenturetest.config.ex.BranchNotFoundException;
 import com.accenture.accenturetest.config.ex.ProductNotFoundException;
 import com.accenture.accenturetest.domain.model.Branch;
@@ -10,12 +11,11 @@ import com.accenture.accenturetest.infrastructure.dao.product.ProductDao;
 import com.accenture.accenturetest.infrastructure.dto.branch.BranchResponseDTO;
 import com.accenture.accenturetest.infrastructure.dto.product.ProductRequestDTO;
 import com.accenture.accenturetest.infrastructure.dto.product.ProductResponseDTO;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +33,7 @@ public class BranchServiceImpl implements BranchService {
     Branch branch =
         branchDao
             .findById(branchId)
-            .orElseThrow(() -> new BranchNotFoundException("Sucursal no encontrada"));
+            .orElseThrow(() -> new BranchNotFoundException(CollectConstant.BRANCH_NOT_FOUND));
 
     Product product = new Product();
     product.setName(request.getName());
@@ -59,20 +59,20 @@ public class BranchServiceImpl implements BranchService {
             productDao::delete,
             () -> {
               if (product.isEmpty()) {
-                throw new ProductNotFoundException("Producto no encontrado");
+                throw new ProductNotFoundException(CollectConstant.PRODUCT_NOT_FOUND);
               } else {
-                throw new BranchNotFoundException("El producto no pertenece a la sucursal");
+                throw new BranchNotFoundException(CollectConstant.PRODUCT_NOT_ASOCIATED_TO_BRANCH);
               }
             });
 
     if (branch.isEmpty()) {
-      throw new BranchNotFoundException("Sucursal no encontrada");
+      throw new BranchNotFoundException(CollectConstant.BRANCH_NOT_FOUND);
     }
 
     return "Ok";
   }
 
-  public String modifyProductStock(Long branchId, Long productId, int newStock) throws Exception {
+  public String modifyProductStock(Long branchId, Long productId, int newStock) {
     return branchDao
         .findById(branchId)
         .flatMap(branch -> productDao.findProductByIdAndBranchId(productId, branchId))
@@ -81,18 +81,17 @@ public class BranchServiceImpl implements BranchService {
             product -> {
               product.setStock(newStock);
               productDao.save(product);
-              return "Stock updated successfully";
+              return CollectConstant.STOCK_UPDATED_SUCCESSFULLY;
             })
-        .orElseThrow(
-            () ->
-                new BranchNotFoundException(
-                    "No se encontró la sucursal o el producto con los ID proporcionados o el stock no es válido."));
+        .orElseThrow(() -> new BranchNotFoundException(CollectConstant.PRODUCT_OR_BRACH_INVALID));
   }
 
   @Override
   public BranchResponseDTO updateBranchName(Long id, String newName) {
-    Branch branch = branchDao.findById(id)
-            .orElseThrow(() -> new BranchNotFoundException("Sucursal no encontrada"));
+    Branch branch =
+        branchDao
+            .findById(id)
+            .orElseThrow(() -> new BranchNotFoundException(CollectConstant.BRANCH_NOT_FOUND));
     branch.setName(newName);
     return entityToBranchDTO.apply(branchDao.save(branch));
   }

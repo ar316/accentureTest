@@ -2,20 +2,19 @@ package com.accenture.accenturetest.infrastructure.controllers.branch;
 
 import com.accenture.accenturetest.aplication.branch.BranchService;
 import com.accenture.accenturetest.infrastructure.dto.branch.BranchResponseDTO;
-import com.accenture.accenturetest.infrastructure.dto.franchise.FranchiseDTO;
 import com.accenture.accenturetest.infrastructure.dto.product.ProductRequestDTO;
 import com.accenture.accenturetest.infrastructure.dto.product.ProductResponseDTO;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/branches")
+@RequestMapping("/api/branch")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class BranchController {
 
   private final BranchService service;
@@ -36,7 +35,7 @@ public class BranchController {
   @DeleteMapping("/{branchId}/products/{productId}")
   public ResponseEntity<String> deleteProductFromBranch(
       @PathVariable Long branchId, @PathVariable Long productId) {
-    return ResponseEntity.ok().body(service.deleteProductFromBranch(branchId, productId));
+    return ResponseEntity.ok(service.deleteProductFromBranch(branchId, productId));
   }
 
   @PutMapping("/{branchId}/products/{productId}/change-stock")
@@ -45,7 +44,7 @@ public class BranchController {
       @PathVariable Long productId,
       @RequestParam("newStock") int newStock)
       throws Exception {
-    return ResponseEntity.ok().body(service.modifyProductStock(branchId, productId, newStock));
+    return ResponseEntity.ok(service.modifyProductStock(branchId, productId, newStock));
   }
 
   @PutMapping("/{id}/name")

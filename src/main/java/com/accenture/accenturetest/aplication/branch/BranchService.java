@@ -13,7 +13,7 @@ public interface BranchService {
 
     String deleteProductFromBranch(Long branchId, Long productId);
 
-    String modifyProductStock(Long branchId, Long productId, int newStock) throws Exception;
+    String modifyProductStock(Long branchId, Long productId, int newStock);
 
     BranchResponseDTO updateBranchName(Long id, String newName);
 }
