@@ -34,4 +34,9 @@ public class ProductDaoImpl implements ProductDao {
   public void delete(Product product) {
     productRepository.delete(product);
   }
+
+  @Override
+  public Optional<Product> findProductByIdAndBranchId(Long productId, Long branchId) {
+    return productRepository.findByBranch_IdAndId(branchId, productId);
+  }
 }

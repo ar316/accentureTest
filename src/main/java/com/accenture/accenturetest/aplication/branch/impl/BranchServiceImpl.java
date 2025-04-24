@@ -7,6 +7,7 @@ import com.accenture.accenturetest.domain.model.Branch;
 import com.accenture.accenturetest.domain.model.Product;
 import com.accenture.accenturetest.infrastructure.dao.branch.BranchDao;
 import com.accenture.accenturetest.infrastructure.dao.product.ProductDao;
+import com.accenture.accenturetest.infrastructure.dto.branch.BranchResponseDTO;
 import com.accenture.accenturetest.infrastructure.dto.product.ProductRequestDTO;
 import com.accenture.accenturetest.infrastructure.dto.product.ProductResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class BranchServiceImpl implements BranchService {
   private final ProductDao productDao;
   private final Function<ProductRequestDTO, Product> productDtoToEntity;
   private final Function<Product, ProductResponseDTO> entityToProductDto;
+  private final Function<Branch, BranchResponseDTO> entityToBranchDTO;
 
   @Override
   public ProductResponseDTO addProductToBranch(Long branchId, ProductRequestDTO request) {
@@ -68,5 +70,30 @@ public class BranchServiceImpl implements BranchService {
     }
 
     return "Ok";
+  }
+
+  public String modifyProductStock(Long branchId, Long productId, int newStock) throws Exception {
+    return branchDao
+        .findById(branchId)
+        .flatMap(branch -> productDao.findProductByIdAndBranchId(productId, branchId))
+        .filter(product -> newStock >= 0)
+        .map(
+            product -> {
+              product.setStock(newStock);
+              productDao.save(product);
+              return "Stock updated successfully";
+            })
+        .orElseThrow(
+            () ->
+                new BranchNotFoundException(
+                    "No se encontró la sucursal o el producto con los ID proporcionados o el stock no es válido."));
+  }
+
+  @Override
+  public BranchResponseDTO updateBranchName(Long id, String newName) {
+    Branch branch = branchDao.findById(id)
+            .orElseThrow(() -> new BranchNotFoundException("Sucursal no encontrada"));
+    branch.setName(newName);
+    return entityToBranchDTO.apply(branchDao.save(branch));
   }
 }

@@ -15,4 +15,6 @@ public interface ProductDao {
     Optional<Product> findById(Long productId);
 
     void delete(Product product);
+
+    Optional<Product> findProductByIdAndBranchId(Long productId, Long branchId);
 }
